@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gnosta.ai – Intelligent Automation for Service Businesses</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 100%;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+        .cta-container {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 16px 32px;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary:hover {
+            background: white;
+            color: #333;
+        }
+        .urgency-text {
+            margin-top: 16px;
+            font-size: 14px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        .features {
+            background: white;
+            padding: 80px 0;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        .feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+            background: #f8f9fa;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 30px;
+        }
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        .section-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .stats {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 60px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .stat-item p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .cta-section {
+            background: #f8f9fa;
+            padding: 80px 0;
+            text-align: center;
+        }
+        .cta-box {
+            background: white;
+            padding: 50px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .cta-box h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        .cta-box p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 32px;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); }
+            50% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5); }
+            100% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); }
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            .hero {
+                min-height: 100vh;
+                padding: 20px 0;
+            }
+            .hero h1 { 
+                font-size: 2.5rem; 
+                margin-bottom: 20px;
+            }
+            .hero p {
+                font-size: 1.1rem;
+                margin-bottom: 24px;
+            }
+            .cta-container { 
+                flex-direction: column; 
+                align-items: stretch; 
+                gap: 12px;
+            }
+            .btn-primary, .btn-secondary { 
+                text-align: center; 
+                padding: 14px 24px;
+                font-size: 16px;
+                width: 100%;
+            }
+            .features {
+                padding: 60px 0;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                margin-top: 40px;
+            }
+            .feature-card {
+                padding: 25px 15px;
+            }
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            .feature-card h3 {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+            }
+            .feature-card p {
+                font-size: 0.9rem;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+                margin-bottom: 12px;
+            }
+            .section-header p {
+                font-size: 1rem;
+            }
+            .stats {
+                padding: 50px 0;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            .stat-item h3 {
+                font-size: 2rem;
+            }
+            .stat-item p {
+                font-size: 0.9rem;
+            }
+            .cta-section {
+                padding: 60px 0;
+            }
+            .cta-box {
+                padding: 30px 20px;
+                margin: 0 10px;
+            }
+            .cta-box h2 {
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+            }
+            .cta-box p {
+                font-size: 1rem;
+                margin-bottom: 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 { 
+                font-size: 2rem; 
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .badge {
+                font-size: 12px;
+                padding: 6px 16px;
+            }
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-box {
+                margin: 0 5px;
+                padding: 25px 15px;
+            }
+            .cta-box h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Gnosta.ai</h1>
+            <div class="hero-content">
+                <div class="badge">🧠 Automation for the Next Era</div>
+                <h1>Future-Proof Your Business with Intelligent Systems</h1>
+                <p>Gnosta.ai helps service businesses evolve—through strategic consulting, automation deployment, or custom AI agents that adapt to your workflows.</p>
+                <div class="cta-container">
+                    <a href="#" class="btn-primary pulse">Explore the Tiers</a>
+                    <a href="#" class="btn-secondary">What is a Multi-agent?</a>
+                </div>
+                <p class="urgency-text">Don't wait—every delay means falling further behind the curve.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Act Now?</h2>
+                <p>The service industry is evolving faster than ever. Adapt now and gain a permanent edge over slower competitors.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Market Awareness</h3>
+                    <p>Most business owners don't even know what tools exist. Gnosta.ai exposes hidden potential and arms you with knowledge.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Done-for-You Hosting</h3>
+                    <p>We handle setup, updates, and new tool implementation. You focus on the business; we handle the tech.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧬</div>
+                    <h3>Autonomous Evolution</h3>
+                    <p>For those ready to leap: dynamic digital twins that learn, adapt, and coach—keeping you in full control.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Choose the Gnosta.ai Service That Fits Your Vision</h2>
+                <p>Whether you're just getting started with automation or ready to evolve into a fully autonomous business system, Gnosta.ai has a path for you.</p>
+
+                <div class="features-grid" style="margin-top: 40px;">
+                    <div class="feature-card">
+                        <div class="feature-icon">📘</div>
+                        <h3>Tier 1: Strategic Consultation</h3>
+                        <p>Discover what's possible. We assess your business, expose the unknowns, and give you a roadmap with tools to run independently. Reach back out when you're ready to level up.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛠️</div>
+                        <h3>Tier 2: Managed Automation</h3>
+                        <p>Let Gnosta.ai host your automation systems and handle upgrades. We implement emerging tools so your business stays lean and competitive without lifting a finger.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>Tier 3: Intelligent Multi-Agent</h3>
+                        <p>We build a custom, evolving multi-agent system using open-source frameworks that learns your business model, adapts instantly. and you own everything</p>
+                    </div>
+                </div>
+
+                <a href="#" class="btn-primary pulse" style="margin-top: 40px;">Start Your Transformation</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.feature-card').forEach((card) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+
+</body>
+</html>
