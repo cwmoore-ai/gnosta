@@ -1,0 +1,56 @@
+{
+  "projectName": "Gnosta Project",
+  "primaryGoal": "Support the functions of the gnosta.ai website and overall company operations through the development and implementation of the Model Context Protocol (MCP) and related tools.",
+  "coreTechnology": "Model Context Protocol (MCP)",
+  "mcpDetails": {
+    "purpose": "Standardize interaction between AI models/agents and external tools, data, and services.",
+    "definitionAndDocsPath": "modelcontextprotocol/",
+    "contentSummary": "Includes specifications, schemas (JSON, TypeScript), documentation (MDX), and SDKs (TypeScript/Node.js, Java).",
+    "documentedVersions": [
+      "2024-11-05",
+      "2025-03-26",
+      "draft"
+    ]
+  },
+  "components": [
+    {
+      "name": "MCP Protocol Definition & Documentation",
+      "path": "modelcontextprotocol/",
+      "description": "Core specifications, schemas, documentation, and SDKs for MCP."
+    },
+    {
+      "name": "MCP Server Implementations",
+      "path": "mcp_servers/",
+      "description": "Contains implementations of MCP servers, such as the gdrive_mcp_server (TypeScript, Docker)."
+    },
+    {
+      "name": "Management & Configuration Scripts",
+      "path": "./",
+      "description": "Shell/batch scripts for running servers and JSON configuration files located in the project root."
+    },
+    {
+      "name": "Image Assets",
+      "path": "images/",
+      "description": "Directory containing image assets for the project."
+    },
+    {
+      "name": "Miscellaneous Assets",
+      "path": "misc/",
+      "description": "Directory containing miscellaneous supporting files (e.g., HTML examples)."
+    }
+  ],
+  "keyTechnologies": [
+    "TypeScript",
+    "Node.js",
+    "Docker",
+    "Markdown (MDX)",
+    "JSON",
+    "Shell Scripting",
+    "Batch Scripting",
+    "HTML"
+  ],
+  "projectMemoryFiles": [
+    "gnosta-project-memory.json",
+    "project-memory.json"
+  ]
+}

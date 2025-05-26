@@ -1,0 +1,212 @@
+{
+  "project_name": "gnosta",
+  "created_date": "2025-05-24T22:11:51Z",
+  "last_updated": "2025-05-24T22:40:00Z",
+  "project_description": "Gnosta.ai - Intelligent Automation for Service Businesses. A comprehensive platform combining a professional landing page with extensive MCP (Model Context Protocol) server capabilities for AI automation services.",
+  "project_structure": {
+    "main_website": {
+      "file": "index.html",
+      "description": "Professional responsive landing page for Gnosta.ai",
+      "features": [
+        "Three-tier service offering (Strategic Consultation, Managed Automation, Multi-Agent Systems)",
+        "Detailed multi-agent system explanation",
+        "Modern gradient design with mobile-first approach",
+        "Smooth scrolling navigation and animations",
+        "Professional branding by Carl Moore Computational Intelligence Company"
+      ]
+    },
+    "mcp_infrastructure": {
+      "local_servers": [
+        {
+          "name": "gdrive_mcp_server",
+          "path": "./mcp_servers/gdrive_mcp_server",
+          "type": "TypeScript",
+          "status": "available",
+          "description": "Google Drive integration MCP server"
+        }
+      ],
+      "parent_directory_servers": [
+        {
+          "name": "quote_mcp_server",
+          "path": "../quote-mcp-server",
+          "type": "JavaScript/HTTP",
+          "port": 3000,
+          "endpoint": "/random-quote",
+          "description": "HTTP server providing random quotes API"
+        },
+        {
+          "name": "weather_mcp_server", 
+          "path": "../weather-mcp-server",
+          "type": "JavaScript/MCP",
+          "port": 3000,
+          "tools": ["get-weather"],
+          "requirements": ["WEATHER_API_KEY environment variable"],
+          "description": "MCP server providing weather information tools"
+        },
+        {
+          "name": "whatsapp_mcp_server",
+          "path": "../whatsapp-mcp/whatsapp-mcp-server",
+          "type": "Python/MCP",
+          "transport": "stdio",
+          "tools": [
+            "search_contacts",
+            "list_messages",
+            "list_chats", 
+            "get_chat",
+            "get_direct_chat_by_contact",
+            "get_contact_chats",
+            "get_last_interaction",
+            "get_message_context",
+            "send_message",
+            "send_file",
+            "send_audio_message",
+            "download_media"
+          ],
+          "description": "Comprehensive WhatsApp MCP server with messaging capabilities"
+        }
+      ],
+      "configured_servers": {
+        "source": "../mcprouter.config.toml",
+        "servers": [
+          {
+            "name": "filesystem",
+            "command": "mcp-server-filesystem \"C:\\\\Dev\\\\projects\"",
+            "description": "Filesystem access server for projects directory"
+          },
+          {
+            "name": "windows_cli",
+            "command": "npx -y @modelcontextprotocol/server-windows-cli",
+            "description": "Windows CLI command execution server"
+          },
+          {
+            "name": "sequential-thinking",
+            "command": "npx -y @modelcontextprotocol/server-sequential-thinking",
+            "description": "Sequential thinking and reasoning server"
+          },
+          {
+            "name": "fetch",
+            "command": "npx -y @modelcontextprotocol/server-fetch",
+            "description": "HTTP fetch and web request server"
+          },
+          {
+            "name": "github",
+            "command": "npx -y @modelcontextprotocol/server-github",
+            "description": "GitHub integration server"
+          },
+          {
+            "name": "slack",
+            "command": "npx -y @modelcontextprotocol/server-slack",
+            "description": "Slack integration server with configured tokens",
+            "configured_env": ["SLACK_BOT_TOKEN", "SLACK_TEAM_ID", "SLACK_SIGNING_SECRET"]
+          }
+        ]
+      }
+    },
+    "documentation": {
+      "mcp_specification": {
+        "path": "./modelcontextprotocol/",
+        "versions": ["2024-11-05", "2025-03-26", "draft"],
+        "content": [
+          "Server implementation guides",
+          "Tools, resources, prompts documentation", 
+          "Utilities for completion, logging, pagination",
+          "Development tutorials and contribution guidelines"
+        ]
+      }
+    },
+    "assets": {
+      "images": [
+        "ChatGPT Image May 23, 2025, 02_39_44 PM.png",
+        "gnosta_logo_256x256_graybg.png",
+        "Gnosta_Logo_256x256_idea.png"
+      ],
+      "misc_files": [
+        "gnosta-signature.html",
+        "index2.html",
+        "index3.html",
+        "index4.html"
+      ]
+    }
+  },
+  "files_created_in_session": [
+    {
+      "file": "mcp-servers-config.json",
+      "description": "Complete inventory of all MCP servers with execution details, tool lists, and requirements",
+      "purpose": "Centralized configuration and documentation of MCP server capabilities"
+    },
+    {
+      "file": "run-mcp-servers.bat",
+      "description": "Windows batch script with interactive menu for running any MCP server",
+      "purpose": "Easy execution of MCP servers from gnosta directory on Windows"
+    },
+    {
+      "file": "run-mcp-servers.sh", 
+      "description": "Unix/Linux shell script with interactive menu for running any MCP server",
+      "purpose": "Easy execution of MCP servers from gnosta directory on Unix/Linux"
+    },
+    {
+      "file": "gnosta-project-memory.json",
+      "description": "Comprehensive project memory file documenting entire project structure and session work",
+      "purpose": "Complete documentation of project state and capabilities"
+    }
+  ],
+  "execution_capabilities": {
+    "from_gnosta_directory": {
+      "quote_server": "cd ../quote-mcp-server && node index.js",
+      "weather_server": "cd ../weather-mcp-server && node index.js", 
+      "whatsapp_server": "cd ../whatsapp-mcp/whatsapp-mcp-server && python main.py",
+      "gdrive_server": "cd ./mcp_servers/gdrive_mcp_server && npm start"
+    },
+    "interactive_scripts": {
+      "windows": "run-mcp-servers.bat",
+      "unix_linux": "run-mcp-servers.sh"
+    }
+  },
+  "session_history": [
+    {
+      "date": "2025-05-24T22:11:51Z",
+      "action": "project_initialization",
+      "description": "Created initial project memory file and began project exploration"
+    },
+    {
+      "date": "2025-05-24T22:15:12Z", 
+      "action": "project_analysis_complete",
+      "description": "Analyzed index.html and updated memory with complete project understanding"
+    },
+    {
+      "date": "2025-05-24T22:30:00Z",
+      "action": "mcp_server_discovery",
+      "description": "User requested search for MCP servers in parent directories"
+    },
+    {
+      "date": "2025-05-24T22:35:00Z",
+      "action": "mcp_inventory_complete", 
+      "description": "Discovered and catalogued all MCP servers: quote, weather, whatsapp, gdrive, plus configured servers"
+    },
+    {
+      "date": "2025-05-24T22:38:00Z",
+      "action": "execution_scripts_created",
+      "description": "Created mcp-servers-config.json and execution scripts for Windows and Unix/Linux"
+    },
+    {
+      "date": "2025-05-24T22:40:00Z",
+      "action": "comprehensive_memory_created",
+      "description": "Created complete project memory file documenting all work and capabilities"
+    }
+  ],
+  "key_insights": [
+    "Gnosta.ai is positioned as a comprehensive AI automation platform for service businesses",
+    "Project combines professional web presence with extensive MCP server infrastructure",
+    "Multiple MCP servers provide diverse capabilities: file management, weather, messaging, web access",
+    "All servers can be executed from gnosta directory using provided scripts and commands",
+    "Project includes complete MCP specification documentation for development reference",
+    "Infrastructure supports both local development and production deployment scenarios"
+  ],
+  "next_steps_recommendations": [
+    "Test execution of all MCP servers to verify functionality",
+    "Set up environment variables for weather and slack servers",
+    "Consider integrating MCP servers into main Gnosta.ai website",
+    "Develop client applications that utilize the MCP server capabilities",
+    "Create deployment documentation for production environments"
+  ]
+}

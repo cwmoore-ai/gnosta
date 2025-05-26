@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "redis-local": {
+      "description": "Local Redis server (Docker, port 6379, C:\\Dev\\redis-data)",
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
