@@ -1,4 +1,9 @@
 {
+  "DockerTerminal": {
+    "transport": "websocket",
+    "url": "ws://localhost:8201",
+    "autoApproveScope": ["execute_command"]
+  },
   "redis-local": {
     "description": "Local Redis server (Docker, port 6379, C:\\Dev\\redis-data)",
     "type": "stdio",

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carl's Custom ChatGPT ::Rules Reference</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      font-family: "Georgia", serif;
+      background: #a9bfa1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      transition: background-color 0.3s ease;
+    }
+
+    .container {
+      background: #fdf6e3;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
+      padding: 2rem;
+      margin: 2rem 0;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform: translateY(0);
+    }
+
+    .container:hover {
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      transform: translateY(-4px);
+    }
+
+    h1, h2, h3 {
+      color: #333;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    h1:hover, h2:hover, h3:hover {
+      color: #5a7a52;
+      transform: translateX(5px);
+    }
+
+    h1 {
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #5a7a52, transparent);
+      transition: left 0.8s ease;
+    }
+
+    h1:hover::after {
+      left: 100%;
+    }
+
+    h2, h3 {
+      margin-top: 2rem;
+      position: relative;
+    }
+
+    h2::before, h3::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 50%;
+      width: 0;
+      height: 2px;
+      background: #5a7a52;
+      transform: translateY(-50%);
+      transition: width 0.3s ease;
+    }
+
+    h2:hover::before, h3:hover::before {
+      width: 8px;
+    }
+
+    p, li {
+      line-height: 1.6;
+      color: #444;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    p:hover, li:hover {
+      color: #222;
+      transform: translateX(3px);
+    }
+
+    ul {
+      transition: transform 0.3s ease;
+    }
+
+    ul:hover {
+      transform: translateX(10px);
+    }
+
+    li {
+      margin: 0.5rem 0;
+      padding: 0.3rem 0;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    li:hover {
+      background: rgba(169, 191, 161, 0.1);
+      padding-left: 10px;
+      transform: translateX(0);
+    }
+
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: #5a7a52;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+
+    li:hover::before {
+      width: 3px;
+    }
+
+    code {
+      background-color: #eee;
+      border-radius: 4px;
+      padding: 0.2em 0.4em;
+      font-family: monospace;
+      color: #333;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    code:hover {
+      background-color: #5a7a52;
+      color: #fff;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(90, 122, 82, 0.3);
+    }
+
+    code::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(45deg);
+      transition: transform 0.6s ease;
+      opacity: 0;
+    }
+
+    code:hover::before {
+      transform: rotate(45deg) translateX(100%);
+      opacity: 1;
+    }
+
+    pre {
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      color: #4a4842;
+      font-family: Consolas, monospace;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      position: relative;
+      transition: all 0.4s ease;
+      border: 2px solid transparent;
+    }
+
+    pre:hover {
+      background-color: #fafafa;
+      border-color: #5a7a52;
+      box-shadow: 0 8px 25px rgba(90, 122, 82, 0.15);
+      transform: scale(1.01);
+    }
+
+    pre code {
+      background: none !important;
+      display: block;
+      padding: 0;
+      margin: 0;
+      color: #4a4842;
+      font-size: 1.05rem;
+      font-family: Consolas, monospace;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      transition: color 0.3s ease;
+    }
+
+    pre:hover code {
+      color: #2a2822;
+    }
+
+    button.copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      border: none;
+      background: #4a4842;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+      opacity: 0.9;
+      z-index: 10;
+      min-width: 60px;
+      font-weight: 500;
+    }
+
+    button.copy-btn:hover {
+      background: #5a7a52;
+      opacity: 1;
+    }
+
+    button.copy-btn:active {
+      background: #3a4a32;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.9em;
+      color: #666;
+      transition: all 0.3s ease;
+      transform: translateY(0);
+    }
+
+    footer:hover {
+      color: #5a7a52;
+      transform: translateY(-2px);
+    }
+
+    footer a {
+      color: inherit;
+      text-decoration: underline;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    footer a:hover {
+      color: #4a4842;
+      text-decoration: none;
+    }
+
+    footer a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 50%;
+      background: #5a7a52;
+      transition: all 0.3s ease;
+    }
+
+    footer a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    /* Subtle scroll animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .container > * {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .container > *:nth-child(2) { animation-delay: 0.1s; }
+    .container > *:nth-child(3) { animation-delay: 0.2s; }
+    .container > *:nth-child(4) { animation-delay: 0.3s; }
+    .container > *:nth-child(5) { animation-delay: 0.4s; }
+    .container > *:nth-child(6) { animation-delay: 0.5s; }
+    .container > *:nth-child(7) { animation-delay: 0.6s; }
+    .container > *:nth-child(8) { animation-delay: 0.7s; }
+
+    /* Responsive hover adjustments */
+    @media (max-width: 768px) {
+      .container:hover {
+        transform: translateY(-2px);
+      }
+      
+      ul:hover {
+        transform: translateX(5px);
+      }
+    }
+  </style>
+  <script>
+    function copyToClipboard() {
+      const codeBlock = document.getElementById("copyTarget");
+      const btn = document.querySelector('.copy-btn');
+      const originalText = btn.textContent;
+      
+      // Get plain text content, removing extra whitespace
+      const plainText = codeBlock.textContent.trim();
+      
+      navigator.clipboard.writeText(plainText).then(() => {
+        btn.textContent = 'Copied!';
+        btn.style.background = '#5a7a52';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '#4a4842';
+        }, 2000);
+      }).catch(err => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = plainText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        btn.textContent = 'Copied!';
+        btn.style.background = '#5a7a52';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '#4a4842';
+        }, 2000);
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Carl's Custom ChatGPT<code>::Rules</code> Reference</h1>
+    <p>This guide defines a modular system of <code>::rules</code> for guiding ChatGPT's behavior through prefix-based instructions. Each rule controls tone, logic, style, or output format.</p>
+    
+    <h2>📌 General Behavior</h2>
+    <p>Be clear, direct, and concise. Prioritize truth, logic, and usefulness. Avoid fluff and disclaimers unless safety-critical. Prefer pragmatic clarity over trendy patterns.</p>
+    
+    <h2>🧭 General Control Rules</h2>
+    <ul>
+      <li><code>::list</code> — Show this list of all defined rules.</li>
+      <li><code>::cite</code> — Return only the most trusted source with full citation and raw URL.</li>
+      <li><code>::factual</code> — Suppress speculation. Only respond with verifiable facts or say "Unsure."</li>
+      <li><code>::creative</code> — Allow storytelling, metaphor, and symbolic or speculative content.</li>
+      <li><code>::bare</code> — Output only the raw result, no intro or closing.</li>
+    </ul>
+    
+    <h2>🧠 Conceptual / Reasoning Rules</h2>
+    <ul>
+      <li><code>::explain</code> — Break down concepts step-by-step. Use metaphors when useful.</li>
+      <li><code>::simplify</code> — Explain clearly, as if to a 10-year-old. Use analogies and plain language.</li>
+      <li><code>::compare</code> — Contrast two or more items or ideas clearly.</li>
+      <li><code>::audit</code> — Critique claims. Flag low-confidence areas or missing sources.</li>
+      <li><code>::summarize</code> — Provide condensed output with key takeaways or TL;DR.</li>
+      <li><code>::expand</code> — Add depth, implications, or broader framing to a point.</li>
+    </ul>
+    
+    <h2>🎭 Stylistic / Expression Rules</h2>
+    <ul>
+      <li><code>::poetic</code> — Respond in poetic form (structured or free verse).</li>
+      <li><code>::persona=name</code> — Reply in a specific tone or character voice.</li>
+      <li><code>::verbatim</code> — Return direct quotes only; no rephrasing or interpretation.</li>
+    </ul>
+    
+    <h2>💻 Coding / Technical Rules</h2>
+    <ul>
+      <li><code>::refactor</code> — Simplify code without changing behavior.</li>
+      <li><code>::code</code> — Return code only. Add inline comments only when essential.</li>
+      <li><code>::design</code> — Provide structure, system layout, or UX design thinking.</li>
+      <li><code>::prompt</code> — Generate precise prompts for LLM input.</li>
+    </ul>
+    
+    <h3>📋 How to Use in ChatGPT</h3>
+    <p>Paste the following block into the <strong>"How would you like ChatGPT to respond?"</strong> field under <strong>Custom Instructions</strong> in ChatGPT settings.</p>
+    
+    <pre><button class="copy-btn" onclick="copyToClipboard()">Copy</button><code id="copyTarget">
+General Behavior: Be clear, direct, and concise. Prioritize truth, logic, and utility. Avoid fluff unless necessary. Use sharp, relevant humor. Prefer clarity over trends.
+
+Support these `::rules` to control output:
+
+General  
+::list — Show all rules  
+::cite — Trusted source only with full citation + raw URL  
+::factual — No speculation; verifiable facts or "Unsure"  
+::creative — Allow metaphor, symbolic, or speculative output  
+::bare — Result only, no framing
+
+Conceptual  
+::explain — Step-by-step or metaphor explanation  
+::simplify — Explain like I'm 10  
+::compare — Compare ideas across dimensions  
+::audit — Validate or critique claims  
+::summarize — TL;DR or key points  
+::expand — Add depth or broader framing
+
+Stylistic  
+::poetic — Respond in poetic form  
+::persona=name — Use a specific voice or tone  
+::verbatim — Quote exactly
+
+Coding  
+::refactor — Simplify code only  
+::code — Code-only output  
+::design — UX/system layout  
+::prompt — Generate a prompt for the task
+    </code></pre>
+    
+    <footer>
+      Carl Moore, <a href="https://gnosta.ai" target="_blank">Gnosta.ai</a>
+    </footer>
+  </div>
+</body>
+</html>

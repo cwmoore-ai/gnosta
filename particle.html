@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Physics Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+        
+        #canvas {
+            display: block;
+            cursor: crosshair;
+            background: transparent;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        input[type="range"] {
+            width: 150px;
+            margin-right: 10px;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 2px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        .info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            max-width: 250px;
+        }
+        
+        .formula {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="controls">
+        <div class="control-group">
+            <label>Particle Count</label>
+            <input type="range" id="particleCount" min="10" max="200" value="50">
+            <span id="particleCountValue">50</span>
+        </div>
+        
+        <div class="control-group">
+            <label>Force Strength</label>
+            <input type="range" id="forceStrength" min="0.1" max="5" step="0.1" value="1">
+            <span id="forceStrengthValue">1</span>
+        </div>
+        
+        <div class="control-group">
+            <label>Trail Length</label>
+            <input type="range" id="trailLength" min="5" max="100" value="30">
+            <span id="trailLengthValue">30</span>
+        </div>
+        
+        <div class="control-group">
+            <label>Damping</label>
+            <input type="range" id="damping" min="0.9" max="1" step="0.001" value="0.995">
+            <span id="dampingValue">0.995</span>
+        </div>
+        
+        <button onclick="resetSimulation()">Reset</button>
+        <button onclick="addExplosion()">Explosion</button>
+        <button onclick="togglePause()">[SPACE] Pause</button>
+    </div>
+    
+    <div class="info">
+        <div class="formula">
+            ẍᵢ = -∑ⱼ (xᵢ - xⱼ) / |xᵢ - xⱼ|³
+        </div>
+        <p>Carl's Interactive particle physics simulation using inverse cube law forces. Click to attract particles, drag to create force fields.</p>
+        <p><strong>Controls:</strong> Mouse to interact, Space to pause, R to reset</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        let mouseX = 0, mouseY = 0;
+        let mouseDown = false;
+        let isPaused = false;
+        let animationId;
+        
+        // Control elements
+        const particleCountSlider = document.getElementById('particleCount');
+        const forceStrengthSlider = document.getElementById('forceStrength');
+        const trailLengthSlider = document.getElementById('trailLength');
+        const dampingSlider = document.getElementById('damping');
+        
+        // Update display values
+        function updateControls() {
+            document.getElementById('particleCountValue').textContent = particleCountSlider.value;
+            document.getElementById('forceStrengthValue').textContent = forceStrengthSlider.value;
+            document.getElementById('trailLengthValue').textContent = trailLengthSlider.value;
+            document.getElementById('dampingValue').textContent = dampingSlider.value;
+        }
+        
+        // Particle class
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.ax = 0;
+                this.ay = 0;
+                this.mass = Math.random() * 2 + 1;
+                this.radius = Math.sqrt(this.mass) * 2;
+                this.hue = Math.random() * 360;
+                this.trail = [];
+                this.maxTrail = parseInt(trailLengthSlider.value);
+                this.energy = 0;
+            }
+            
+            update() {
+                // Store position for trail
+                this.trail.push({x: this.x, y: this.y, energy: this.energy});
+                if (this.trail.length > this.maxTrail) {
+                    this.trail.shift();
+                }
+                
+                // Update velocity and position using the force formula
+                this.vx += this.ax;
+                this.vy += this.ay;
+                
+                // Apply damping
+                const damping = parseFloat(dampingSlider.value);
+                this.vx *= damping;
+                this.vy *= damping;
+                
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Boundary conditions with soft bounce
+                const margin = 50;
+                if (this.x < margin) {
+                    this.x = margin;
+                    this.vx = Math.abs(this.vx) * 0.8;
+                }
+                if (this.x > canvas.width - margin) {
+                    this.x = canvas.width - margin;
+                    this.vx = -Math.abs(this.vx) * 0.8;
+                }
+                if (this.y < margin) {
+                    this.y = margin;
+                    this.vy = Math.abs(this.vy) * 0.8;
+                }
+                if (this.y > canvas.height - margin) {
+                    this.y = canvas.height - margin;
+                    this.vy = -Math.abs(this.vy) * 0.8;
+                }
+                
+                // Calculate energy for color effects
+                this.energy = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                
+                // Reset acceleration for next frame
+                this.ax = 0;
+                this.ay = 0;
+            }
+            
+            applyForce(fx, fy) {
+                this.ax += fx / this.mass;
+                this.ay += fy / this.mass;
+            }
+            
+            draw() {
+                // Draw trail
+                for (let i = 0; i < this.trail.length; i++) {
+                    const point = this.trail[i];
+                    const alpha = (i / this.trail.length) * 0.5;
+                    const size = alpha * this.radius;
+                    const energyIntensity = Math.min(point.energy * 10, 100);
+                    
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue + energyIntensity}, 70%, 60%, ${alpha})`;
+                    ctx.fill();
+                }
+                
+                // Draw particle with energy-based effects
+                const energyGlow = Math.min(this.energy * 20, 50);
+                const glowRadius = this.radius + energyGlow;
+                
+                // Outer glow
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowRadius);
+                gradient.addColorStop(0, `hsla(${this.hue + energyGlow}, 80%, 70%, 0.8)`);
+                gradient.addColorStop(0.7, `hsla(${this.hue + energyGlow}, 60%, 50%, 0.3)`);
+                gradient.addColorStop(1, `hsla(${this.hue + energyGlow}, 40%, 30%, 0)`);
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                // Core particle
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${this.hue + energyGlow}, 90%, 80%)`;
+                ctx.fill();
+                
+                // Inner shine
+                ctx.beginPath();
+                ctx.arc(this.x - this.radius/3, this.y - this.radius/3, this.radius/2, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue + energyGlow}, 100%, 90%, 0.6)`;
+                ctx.fill();
+            }
+        }
+        
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            const count = parseInt(particleCountSlider.value);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(
+                    Math.random() * (canvas.width - 200) + 100,
+                    Math.random() * (canvas.height - 200) + 100
+                ));
+            }
+        }
+        
+        // Calculate forces using the given formula
+        function calculateForces() {
+            const forceStrength = parseFloat(forceStrengthSlider.value);
+            
+            for (let i = 0; i < particles.length; i++) {
+                const pi = particles[i];
+                
+                // Particle-particle interactions (formula implementation)
+                for (let j = 0; j < particles.length; j++) {
+                    if (i === j) continue;
+                    
+                    const pj = particles[j];
+                    const dx = pi.x - pj.x;
+                    const dy = pi.y - pj.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0 && distance < 200) {
+                        // Apply the formula: ẍᵢ = -∑ⱼ (xᵢ - xⱼ) / |xᵢ - xⱼ|³
+                        const distanceCubed = distance * distance * distance;
+                        const forceX = -(dx / distanceCubed) * forceStrength * pj.mass * 1000;
+                        const forceY = -(dy / distanceCubed) * forceStrength * pj.mass * 1000;
+                        
+                        pi.applyForce(forceX, forceY);
+                    }
+                }
+                
+                // Mouse interaction
+                if (mouseDown) {
+                    const dx = pi.x - mouseX;
+                    const dy = pi.y - mouseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0) {
+                        const attraction = 500 / (distance * distance);
+                        pi.applyForce(-dx * attraction, -dy * attraction);
+                    }
+                }
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            if (!isPaused) {
+                // Create trailing effect
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Update trail length for all particles
+                particles.forEach(p => p.maxTrail = parseInt(trailLengthSlider.value));
+                
+                calculateForces();
+                
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                
+                // Draw connections between nearby particles
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            const alpha = (100 - distance) / 100;
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.2})`;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        // Event handlers
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        canvas.addEventListener('mousedown', (e) => {
+            mouseDown = true;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            mouseDown = false;
+        });
+        
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                togglePause();
+            }
+            if (e.code === 'KeyR') {
+                resetSimulation();
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // Control functions
+        function resetSimulation() {
+            initParticles();
+        }
+        
+        function addExplosion() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            particles.forEach(particle => {
+                const dx = particle.x - centerX;
+                const dy = particle.y - centerY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance > 0) {
+                    const force = 500 / distance;
+                    particle.vx += (dx / distance) * force;
+                    particle.vy += (dy / distance) * force;
+                }
+            });
+        }
+        
+        function togglePause() {
+            isPaused = !isPaused;
+        }
+        
+        // Update controls when sliders change
+        [particleCountSlider, forceStrengthSlider, trailLengthSlider, dampingSlider].forEach(slider => {
+            slider.addEventListener('input', updateControls);
+        });
+        
+        particleCountSlider.addEventListener('change', resetSimulation);
+        
+        // Initialize
+        updateControls();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

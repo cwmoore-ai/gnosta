@@ -1,0 +1,12 @@
+services:
+  mcp-terminal:
+    image: node:18-alpine
+    ports:
+      - "8201:8201"
+    command: >
+      sh -c "npm install -g @modelcontextprotocol/server-terminal &&
+             mcp-terminal --shell bash --default-cwd /workspace/gnosta --allowed-commands git,npm,python --port 8201"
+    working_dir: /workspace/gnosta
+    volumes:
+      - ../:/workspace/gnosta
+    restart: unless-stopped

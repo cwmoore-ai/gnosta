@@ -1,1 +1,6 @@
 /index.html
+/infra/mcp-terminal-data/
+/node_modules/
+.DS_Store
+*.log
+*.tmp

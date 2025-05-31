@@ -1,3 +1,160 @@
 {
-  "mcpServers": {}
+  "mcp_servers": {
+    "local_servers": [
+      {
+        "name": "gdrive_mcp_server",
+        "path": "./mcp_servers/gdrive_mcp_server",
+        "type": "typescript",
+        "entry_point": "index.ts",
+        "description": "Google Drive MCP server (TypeScript)",
+        "status": "available",
+        "execution": {
+          "command": "npm start",
+          "working_directory": "./mcp_servers/gdrive_mcp_server"
+        }
+      }
+    ],
+    "parent_directory_servers": [
+      {
+        "name": "weather_mcp_server",
+        "path": "../weather-mcp-server",
+        "type": "javascript",
+        "entry_point": "index.js",
+        "description": "Weather information MCP server",
+        "status": "available",
+        "execution": {
+          "command": "node index.js",
+          "working_directory": "../weather-mcp-server",
+          "port": 3000,
+          "requires_env": [
+            "WEATHER_API_KEY"
+          ]
+        },
+        "tools": [
+          "get-weather"
+        ]
+      },
+      {
+        "name": "whatsapp_mcp_server",
+        "path": "../whatsapp-mcp/whatsapp-mcp-server",
+        "type": "python",
+        "entry_point": "main.py",
+        "description": "Comprehensive WhatsApp MCP server",
+        "status": "available",
+        "execution": {
+          "command": "python main.py",
+          "working_directory": "../whatsapp-mcp/whatsapp-mcp-server",
+          "transport": "stdio"
+        },
+        "tools": [
+          "search_contacts",
+          "list_messages",
+          "list_chats",
+          "get_chat",
+          "get_direct_chat_by_contact",
+          "get_contact_chats",
+          "get_last_interaction",
+          "get_message_context",
+          "send_message",
+          "send_file",
+          "send_audio_message",
+          "download_media"
+        ]
+      }
+    ],
+    "configured_servers": [
+      {
+        "name": "filesystem",
+        "command": "mcp-server-filesystem \"C:\\\\Dev\\\\projects\"",
+        "description": "Filesystem access for projects directory"
+      },
+      {
+        "name": "windows_cli",
+        "command": "npx -y @modelcontextprotocol/server-windows-cli",
+        "description": "Windows CLI command execution"
+      },
+      {
+        "name": "sequential-thinking",
+        "command": "npx -y @modelcontextprotocol/server-sequential-thinking",
+        "description": "Sequential thinking / reasoning server"
+      },
+      {
+        "name": "fetch",
+        "command": "npx -y @modelcontextprotocol/server-fetch",
+        "description": "HTTP fetch / web-request server"
+      },
+      {
+        "name": "github",
+        "command": "npx -y @modelcontextprotocol/server-github",
+        "description": "GitHub integration server"
+      },
+      {
+        "name": "slack",
+        "command": "npx -y @modelcontextprotocol/server-slack",
+        "description": "Slack integration server",
+        "configured_env": {
+          "SLACK_BOT_TOKEN": "configured",
+          "SLACK_TEAM_ID": "configured",
+          "SLACK_SIGNING_SECRET": "configured"
+        }
+      },
+      {
+        "name": "DockerTerminal",
+        "transport": "websocket",
+        "url": "ws://localhost:8201",
+        "autoApproveScope": [
+          "execute_command"
+        ],
+        "description": "Remote Docker terminal (WS transport)"
+      },
+      {
+        "name": "terminal",
+        "command": "npx -y @rinardnick/mcp-terminal",
+        "description": "Realtime local terminal MCP server",
+        "autoApproveScope": [
+          "execute_command"
+        ],
+        "config": {
+          "defaultCwd": "C:/Dev/projects/gnosta",
+          "allowedCommands": [
+            "npm",
+            "node",
+            "git",
+            "powershell"
+          ],
+          "defaultTimeout": 30000
+        }
+      },
+      {
+        "name": "brave_search",
+        "command": "npx -y @modelcontextprotocol/server-brave-search",
+        "description": "Web & local search via Brave Search API",
+        "configured_env": {
+          "BRAVE_SEARCH_API_KEY": "configured"
+        }
+      },
+      {
+        "name": "puppeteer",
+        "command": "npx -y @modelcontextprotocol/server-puppeteer",
+        "description": "Headless browser automation with Puppeteer"
+      },
+      {
+        "name": "n8n",
+        "command": "npx -y n8n-mcp-server",
+        "description": "Interact with self-hosted n8n workflows",
+        "configured_env": {
+          "N8N_API_KEY": "configured",
+          "N8N_BASE_URL": "http://localhost:5678"
+        }
+      }
+    ],
+    "redis-local": {
+      "protocol": "redis",
+      "host": "localhost",
+      "port": 6379,
+      "description": "Redis server for persistent memory",
+      "persistence": "AOF",
+      "aof_file": "appendonly.aof"
+    }
+  }
 }
